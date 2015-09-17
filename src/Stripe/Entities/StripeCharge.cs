@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Stripe.Constants;
 using Stripe.Infrastructure;
 
 namespace Stripe
@@ -38,8 +39,17 @@ namespace Stripe
         [JsonProperty("source")]
         public StripeCard Source { get; set; }
 
+        [JsonIgnore]
+        public StripeChargeStatus Status { get; set; }
+
         [JsonProperty("status")]
-        public string Status { get; set; }
+        internal string InternalStatus
+        {
+            set
+            {
+                Status = EnumHelper.GetEnumValueFromDescription<StripeChargeStatus>(value);
+            }
+        }
 
         [JsonProperty("amount_refunded")]
         public int AmountRefunded { get; set; }
@@ -85,8 +95,16 @@ namespace Stripe
         [JsonProperty("dispute")]
         public StripeDispute Dispute { get; set; }
 
+        [JsonIgnore]
+        public ErrorCode FailureCode { get; set; }
+
         [JsonProperty("failure_code")]
-        public string FailureCode { get; set; }
+        internal string InternalFailureCode {
+            set
+            {
+                FailureCode = EnumHelper.GetEnumValueFromDescription<ErrorCode>(value);
+            }
+        }
 
         [JsonProperty("failure_message")]
         public string FailureMessage { get; set; }
