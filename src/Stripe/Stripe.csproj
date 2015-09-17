@@ -40,6 +40,7 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -52,6 +53,8 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Constants\StripeChargeConstants.cs" />
+    <Compile Include="Constants\StripeErrorConstants.cs" />
     <Compile Include="Entities\StripeAccountVerification.cs" />
     <Compile Include="Entities\StripeAddress.cs" />
     <Compile Include="Entities\StripeBirthDay.cs" />
@@ -72,6 +75,7 @@
     <Compile Include="Entities\StripeTransferReversal.cs" />
     <Compile Include="Constants\StripeRefundReasons.cs" />
     <Compile Include="Entities\StripeTransferScheduleEntity.cs" />
+    <Compile Include="Infrastructure\EnumHelper.cs" />
     <Compile Include="Infrastructure\DictionaryExtensions.cs" />
     <Compile Include="Infrastructure\ExpandableProperty.cs" />
     <Compile Include="Infrastructure\FileStreamExtensions.cs" />
@@ -177,6 +181,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
