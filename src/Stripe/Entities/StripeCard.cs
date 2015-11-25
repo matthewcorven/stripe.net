@@ -2,6 +2,7 @@
 using Stripe.Infrastructure;
 using System;
 using System.Collections.Generic;
+using Stripe.Constants;
 
 namespace Stripe
 {
@@ -10,9 +11,17 @@ namespace Stripe
         [JsonProperty("object")]
         public string Object { get; set; }
 
-        [JsonProperty("brand")]
-        public string Brand { get; set; }
+        [JsonIgnore]
+        public StripeCardBrand Brand { get; set; }
 
+        [JsonProperty("brand")]
+        internal string InternalBrand
+        {
+            set
+            {
+                Brand = EnumHelper.GetEnumValueFromDescription<StripeCardBrand>(value);
+            }
+        }
         [JsonProperty("exp_month")]
         public string ExpirationMonth { get; set; }
 

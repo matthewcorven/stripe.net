@@ -55,8 +55,17 @@ namespace Stripe
         [JsonProperty("metadata")]
         public Dictionary<string, string> Metadata { get; set; }
 
+        [JsonIgnore]
+        public StripeRefundReason Reason { get; set; }
+
         [JsonProperty("reason")]
-        public string Reason { get; set; }
+        internal string InternalStatus
+        {
+            set
+            {
+                Reason = EnumHelper.GetEnumValueFromDescription<StripeRefundReason>(value);
+            }
+        }
 
         [JsonProperty("receipt_number")]
         public string ReceiptNumber { get; set; }

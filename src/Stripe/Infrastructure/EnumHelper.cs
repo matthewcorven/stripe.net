@@ -62,6 +62,44 @@ namespace Stripe.Infrastructure
 
             return outString;
         }
-        
+
+        [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field)]
+        public sealed class LongDescriptionAttribute : Attribute
+        {
+            private readonly string _longDescription;
+
+            public string LongDescription
+            {
+                get
+                {
+                    return _longDescription;
+                }
+            }
+
+            public LongDescriptionAttribute(string longDescription)
+            {
+                _longDescription = longDescription;
+            }
+        }
+
+        public static string GetLongDescription(this Enum value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            var longDescription = value.ToString();
+            var fieldInfo = value.GetType().GetField(longDescription);
+            var attributes =
+               (LongDescriptionAttribute[])
+             fieldInfo.GetCustomAttributes(typeof(LongDescriptionAttribute), false);
+
+            if (attributes.Length > 0)
+            {
+                longDescription = attributes[0].LongDescription;
+            }
+            return longDescription;
+        }
     }
 }

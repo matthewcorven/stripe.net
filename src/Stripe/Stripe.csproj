@@ -53,7 +53,9 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Constants\StripeCardConstants.cs" />
     <Compile Include="Constants\StripeChargeConstants.cs" />
+    <Compile Include="Constants\StripeDisputeConstants.cs" />
     <Compile Include="Constants\StripeErrorConstants.cs" />
     <Compile Include="Entities\StripeAccountVerification.cs" />
     <Compile Include="Entities\StripeAddress.cs" />

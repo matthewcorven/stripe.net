@@ -1,10 +1,17 @@
-﻿namespace Stripe
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace Stripe
 {
-    public static class StripeRefundReasons
+    public enum StripeRefundReason
     {
-        public const string Unknown = null;
-        public const string Duplicate = "duplicate";
-        public const string Fradulent = "fraudulent";
-        public const string RequestedByCustomer = "requested_by_customer";
+        Unknown = 0,
+        [Description("duplicate")]
+        Duplicate,
+        [Description("fraudulent")]
+        Fradulent,
+        [Description("requested_by_customer")]
+        [Display(Name= "Requested By Customer")]
+        RequestedByCustomer
     }
 }
