@@ -26,6 +26,19 @@ namespace Stripe
             return "";
         }
 
+        public virtual StripeDocument Get(string fileToken, StripeRequestOptions requestOptions = null)
+        {
+            requestOptions = SetupRequestOptions(requestOptions);
+
+            var url = string.Format("{0}/{1}", Urls.Uploads, fileToken);
+            url = this.ApplyAllParameters(null, url, false);
+
+            var response = Requestor.GetString(url, requestOptions);
+
+            return Mapper<StripeDocument>.MapFromJson(response);
+        }
+
+
         public virtual StripeDocument UploadIdentityDocument(Stream file, string fileName, StripeRequestOptions requestOptions = null)
         {
             requestOptions = SetupRequestOptions(requestOptions);

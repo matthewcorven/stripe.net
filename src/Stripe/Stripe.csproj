@@ -57,6 +57,7 @@
     <Compile Include="Constants\StripeChargeConstants.cs" />
     <Compile Include="Constants\StripeDisputeConstants.cs" />
     <Compile Include="Constants\StripeErrorConstants.cs" />
+    <Compile Include="Constants\StripeTransferConstants.cs" />
     <Compile Include="Entities\StripeAccountVerification.cs" />
     <Compile Include="Entities\StripeAddress.cs" />
     <Compile Include="Entities\StripeBirthDay.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Services\Charges\StripeChargeUpdateOptions.cs" />
     <Compile Include="Services\Disputes\StripeDisputeUpdateOptions.cs" />
     <Compile Include="Services\Documents\StripeDocumentsService.cs" />
+    <Compile Include="Services\Refunds\StripeRefundListOptions.cs" />
     <Compile Include="Services\Refunds\StripeRefundCreateOptions.cs" />
     <Compile Include="Services\Refunds\StripeRefundService.cs" />
     <Compile Include="Services\Refunds\StripeRefundUpdateOptions.cs" />

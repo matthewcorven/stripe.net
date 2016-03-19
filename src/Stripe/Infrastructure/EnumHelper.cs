@@ -63,7 +63,7 @@ namespace Stripe.Infrastructure
             return outString;
         }
 
-        [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field)]
+        [AttributeUsage(AttributeTargets.Enum | AttributeTargets.Field | AttributeTargets.Property)]
         public sealed class LongDescriptionAttribute : Attribute
         {
             private readonly string _longDescription;

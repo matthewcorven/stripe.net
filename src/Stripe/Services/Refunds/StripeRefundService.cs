@@ -7,25 +7,26 @@ namespace Stripe
     {
         public StripeRefundService(string apiKey = null) : base(apiKey) { }
 
+        public bool ExpandCharge { get; set; }
         public bool ExpandBalanceTransaction { get; set; }
 
-        public virtual StripeRefund Create(string chargeId, StripeRefundCreateOptions createOptions = null, StripeRequestOptions requestOptions = null)
+        public virtual StripeRefund Create(StripeRefundCreateOptions createOptions = null, StripeRequestOptions requestOptions = null)
         {
             requestOptions = SetupRequestOptions(requestOptions);
 
-            var url = string.Format("{0}/{1}/refunds", Urls.Charges, chargeId);
-            url = this.ApplyAllParameters(createOptions, url, false);
+            var url = this.ApplyAllParameters(createOptions, Urls.Refunds, false);
+            url = this.ApplyAllParameters(null, url, false);
 
             var response = Requestor.PostString(url, requestOptions);
 
             return Mapper<StripeRefund>.MapFromJson(response);
         }
 
-        public virtual StripeRefund Get(string chargeId, string refundId, StripeRequestOptions requestOptions = null)
+        public virtual StripeRefund Get(string refundId, StripeRequestOptions requestOptions = null)
         {
             requestOptions = SetupRequestOptions(requestOptions);
 
-            var url = string.Format("{0}/{1}/refunds/{2}", Urls.Charges, chargeId, refundId);
+            var url = string.Format("{0}/{1}", Urls.Refunds, refundId);
             url = this.ApplyAllParameters(null, url, false);
 
             var response = Requestor.GetString(url, requestOptions);
@@ -33,11 +34,11 @@ namespace Stripe
             return Mapper<StripeRefund>.MapFromJson(response);
         }
 
-        public virtual StripeRefund Update(string chargeId, string refundId, StripeRefundUpdateOptions updateOptions, StripeRequestOptions requestOptions = null)
+        public virtual StripeRefund Update(string refundId, StripeRefundUpdateOptions updateOptions, StripeRequestOptions requestOptions = null)
         {
             requestOptions = SetupRequestOptions(requestOptions);
 
-            var url = string.Format("{0}/{1}/refunds/{2}", Urls.Charges, chargeId, refundId);
+            var url = string.Format("{0}/{1}", Urls.Refunds, refundId);
             url = this.ApplyAllParameters(updateOptions, url, false);
 
             var response = Requestor.PostString(url, requestOptions);
@@ -45,11 +46,11 @@ namespace Stripe
             return Mapper<StripeRefund>.MapFromJson(response);
         }
 
-        public virtual IEnumerable<StripeRefund> List(string chargeId, StripeListOptions listOptions = null, StripeRequestOptions requestOptions = null)
+        public virtual IEnumerable<StripeRefund> List(StripeListOptions listOptions = null, StripeRequestOptions requestOptions = null)
         {
             requestOptions = SetupRequestOptions(requestOptions);
 
-            var url = string.Format("{0}/{1}/refunds", Urls.Charges, chargeId);
+            var url = Urls.Charges;
             url = this.ApplyAllParameters(listOptions, url, true);
 
             var response = Requestor.GetString(url, requestOptions);

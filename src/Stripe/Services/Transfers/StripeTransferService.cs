@@ -7,6 +7,9 @@ namespace Stripe
         public StripeTransferService(string apiKey = null) : base(apiKey) { }
 
         public bool ExpandBalanceTransaction { get; set; }
+        public bool ExpandDestination { get; set; }
+        public bool ExpandDestinationPayment { get; set; }
+        public bool SourceTransaction { get; set; }
 
         public virtual StripeTransfer Create(StripeTransferCreateOptions createOptions, StripeRequestOptions requestOptions = null)
         {

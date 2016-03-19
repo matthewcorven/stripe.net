@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Stripe.Services.Charges
+namespace Stripe
 {
     public class StripeChargeUpdateOptions
     {
@@ -11,7 +11,8 @@ namespace Stripe.Services.Charges
         [JsonProperty("receipt_email")]
         public string ReceiptEmail { get; set; }
 
-        // fraud_details
+        [JsonProperty("fraud_details")]
+        public Dictionary<string, string> FraudDetails { get; set; }
 
         // shipping
 

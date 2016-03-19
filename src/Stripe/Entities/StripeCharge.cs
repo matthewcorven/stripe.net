@@ -148,9 +148,7 @@ namespace Stripe
 
         [JsonIgnore]
         public StripeTransfer Transfer { get; set; }
-
-        // todo: hash, fraud details
-
+        
         // todo: hash, shipping
 
         // transfer

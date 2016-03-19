@@ -55,6 +55,9 @@ namespace Stripe
         [JsonProperty("evidence[duplicate_charge_explanation]")]
         public string DuplicateChargeExplanation { get; set; }
 
+        [JsonProperty("evidence[duplicate_charge_documentation]")]
+        public string DuplicateChargeDocumentation { get; set; }
+
         [JsonProperty("evidence[refund_policy]")]
         public string RefundPolicy { get; set; }
 

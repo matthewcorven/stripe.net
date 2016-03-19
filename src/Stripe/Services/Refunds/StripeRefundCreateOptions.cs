@@ -5,6 +5,9 @@ namespace Stripe
 {
     public class StripeRefundCreateOptions
     {
+        [JsonProperty("charge")]
+        public string Charge { get; set; }
+
         [JsonProperty("amount")]
         public int? Amount { get; set; }
 

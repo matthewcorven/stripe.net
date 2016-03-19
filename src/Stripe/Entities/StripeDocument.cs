@@ -11,7 +11,7 @@ namespace Stripe
         public DateTime Created { get; set; }
 
         [JsonProperty("size")]
-        public string Size { get; set; }
+        public int Size { get; set; }
 
         [JsonProperty("type")]
         public string Type { get; set; }

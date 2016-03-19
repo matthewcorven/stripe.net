@@ -94,31 +94,49 @@ namespace Stripe
 
         private static string ExecuteWebRequest(WebRequest webRequest)
         {
-            try
+            string result = null;
+
+            // Attempt communication up to 3 times, in case of temporary Stripe outtage or other reason
+            // Idempotency string on charges will prevent multiple transactions
+            const int maxAttempts = 3;
+
+            for (var attempt = 1; attempt <= maxAttempts; attempt++)
             {
-                using (var response = webRequest.GetResponse())
+                try
                 {
-                    return ReadStream(response.GetResponseStream());
+                    using (var response = webRequest.GetResponse())
+                    {
+                        result = ReadStream(response.GetResponseStream());
+                    }
                 }
-            }
-            catch (WebException webException)
-            {
-                if (webException.Response != null)
+                catch (WebException webException)
                 {
-                    var statusCode = ((HttpWebResponse)webException.Response).StatusCode;
+                    if (webException.Response != null)
+                    {
+                        var statusCode = ((HttpWebResponse)webException.Response).StatusCode;
 
-                    var stripeError = new StripeError();
+                        var stripeError = new StripeError();
 
-                    if(webRequest.RequestUri.ToString().Contains("oauth"))
-                        stripeError = Mapper<StripeError>.MapFromJson(ReadStream(webException.Response.GetResponseStream()));
-                    else
-                        stripeError = Mapper<StripeError>.MapFromJson(ReadStream(webException.Response.GetResponseStream()), "error");
+                        if (webRequest.RequestUri.ToString().Contains("oauth"))
+                            stripeError = Mapper<StripeError>.MapFromJson(ReadStream(webException.Response.GetResponseStream()));
+                        else
+                            stripeError = Mapper<StripeError>.MapFromJson(ReadStream(webException.Response.GetResponseStream()), "error");
 
-                    throw new StripeException(statusCode, stripeError, stripeError.Message);
+                        if (attempt == maxAttempts)
+                            throw new StripeException(statusCode, stripeError, stripeError.Message);
+                    }
+
+                    if (attempt == maxAttempts)
+                        // NOTE: Running on localhost sometimes takes us here.
+                        //       Doesn't seem to happen in production environment.
+                        throw;
                 }
 
-                throw;
+                if (!string.IsNullOrEmpty(result))
+                    break;
             }
+
+            return result;
         }
 
         private static string ReadStream(Stream stream)
@@ -149,6 +167,8 @@ namespace Stripe
           string fileMimeType,
           string fileFormKey, StripeRequestOptions requestOptions = null)
         {
+            string result = null;
+
             webRequest.ContentType = "application/x-www-form-urlencoded";
             webRequest.KeepAlive = true;
 
@@ -166,33 +186,46 @@ namespace Stripe
             requestStream.Write(endBytes, 0, endBytes.Length);
             requestStream.Close();
 
-            try
+            // Attempt communication up to 3 times, in case of temporary Stripe outtage or other reason
+            // Idempotency string on charges will prevent multiple transactions
+            const int maxAttempts = 3;
+
+            for (var attempt = 1; attempt <= maxAttempts; attempt++)
             {
-                using (WebResponse response = webRequest.GetResponse())
-                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                try
                 {
-                    return reader.ReadToEnd();
-                };
-            }
-            catch (WebException webException)
-            {
-                if (webException.Response != null)
+                    using (WebResponse response = webRequest.GetResponse())
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        result = reader.ReadToEnd();
+                    };
+                }
+                catch (WebException webException)
                 {
-                    var statusCode = ((HttpWebResponse)webException.Response).StatusCode;
+                    if (webException.Response != null)
+                    {
+                        var statusCode = ((HttpWebResponse)webException.Response).StatusCode;
 
-                    var stripeError = new StripeError();
+                        var stripeError = new StripeError();
 
-                    if (webRequest.RequestUri.ToString().Contains("oauth"))
-                        stripeError = Mapper<StripeError>.MapFromJson(ReadStream(webException.Response.GetResponseStream()));
-                    else
-                        stripeError = Mapper<StripeError>.MapFromJson(ReadStream(webException.Response.GetResponseStream()), "error");
+                        if (webRequest.RequestUri.ToString().Contains("oauth"))
+                            stripeError = Mapper<StripeError>.MapFromJson(ReadStream(webException.Response.GetResponseStream()));
+                        else
+                            stripeError = Mapper<StripeError>.MapFromJson(ReadStream(webException.Response.GetResponseStream()), "error");
 
-                    throw new StripeException(statusCode, stripeError, stripeError.Message);
+                        if (attempt == maxAttempts)
+                            throw new StripeException(statusCode, stripeError, stripeError.Message);
+                    }
+
+                    if (attempt == maxAttempts)
+                        throw;
                 }
 
-                throw;
+                if (!string.IsNullOrEmpty(result))
+                    break;
             }
 
+            return result;
         }
     }
 }

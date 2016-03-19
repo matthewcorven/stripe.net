@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Stripe.Infrastructure;
 using Newtonsoft.Json.Linq;
+using Stripe.Constants;
 
 namespace Stripe
 {
@@ -34,9 +35,18 @@ namespace Stripe
         [JsonProperty("reversed")]
         public bool Reversed { get; set; }
 
-        [JsonProperty("status")]
-        public string Status { get; set; }
+        [JsonIgnore]
+        public StripeTransferStatus Status { get; set; }
 
+        [JsonProperty("status")]
+        internal string InternalStatus
+        {
+            set
+            {
+                Status = EnumHelper.GetEnumValueFromDescription<StripeTransferStatus>(value);
+            }
+        }
+        
         [JsonProperty("type")]
         public string Type { get; set; }
 
@@ -57,6 +67,12 @@ namespace Stripe
 
         [JsonProperty("description")]
         public string Description { get; set; }
+
+        [JsonProperty("destination")]
+        public string Destination { get; set; }
+
+        [JsonProperty("destination_payment")]
+        public string DestinationPayment { get; set; }
 
         [JsonProperty("failure_code")]
         public string FailureCode { get; set; }
@@ -87,10 +103,13 @@ namespace Stripe
             }
         }
 
-        [JsonProperty("statement_descriptor")]
-        public string StatementDescriptor { get; set; }
-
         [JsonProperty("source_transaction")]
         public string SourceTransaction { get; set; }
+
+        [JsonProperty("source_type")]
+        public string SourceType { get; set; }
+
+        [JsonProperty("statement_descriptor")]
+        public string StatementDescriptor { get; set; }
     }
 }

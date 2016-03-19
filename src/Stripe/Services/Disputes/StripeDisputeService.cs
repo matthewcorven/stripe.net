@@ -5,25 +5,37 @@
         public StripeDisputeService(string apiKey = null) : base(apiKey) { }
 
         public bool ExpandCharge { get; set; }
-        public bool ExpandBalanceTransaction { get; set; }
 
-        public virtual StripeDispute Update(string chargeId, StripeDisputeUpdateOptions evidence = null, StripeRequestOptions requestOptions = null)
+        public virtual StripeDispute Get(string disputeId, StripeRequestOptions requestOptions = null)
         {
             requestOptions = SetupRequestOptions(requestOptions);
 
-            var url = string.Format("{0}/{1}/dispute", Urls.Charges, chargeId);
-            url = this.ApplyAllParameters(evidence, url, true);
+            var url = string.Format("{0}/{1}", Urls.Disputes, disputeId);
+            url = this.ApplyAllParameters(null, url, false);
+
+            var response = Requestor.GetString(url, requestOptions);
+
+            return Mapper<StripeDispute>.MapFromJson(response);
+        }
+
+        public virtual StripeDispute Update(string disputeId, StripeDisputeUpdateOptions updateOptions = null, StripeRequestOptions requestOptions = null)
+        {
+            requestOptions = SetupRequestOptions(requestOptions);
+
+            var url = string.Format("{0}/{1}", Urls.Disputes, disputeId);
+            url = this.ApplyAllParameters(updateOptions, url, true);
 
             var response = Requestor.PostString(url, requestOptions);
 
             return Mapper<StripeDispute>.MapFromJson(response);
         }
 
-        public virtual StripeDispute Close(string chargeId, StripeRequestOptions requestOptions = null)
+
+        public virtual StripeDispute Close(string disputeId, StripeRequestOptions requestOptions = null)
         {
             requestOptions = SetupRequestOptions(requestOptions);
 
-            var url = string.Format("{0}/{1}/dispute/close", Urls.Charges, chargeId);
+            var url = string.Format("{0}/{1}/close", Urls.Charges, disputeId);
             url = this.ApplyAllParameters(null, url, false);
 
             var response = Requestor.PostString(url, requestOptions);

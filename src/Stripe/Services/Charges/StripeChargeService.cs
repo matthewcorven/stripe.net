@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Stripe.Services.Charges;
 
 namespace Stripe
 {
@@ -39,7 +38,7 @@ namespace Stripe
             return Mapper<StripeCharge>.MapFromJson(response);
         }
 
-        public virtual StripeCharge Update(string chargeId, StripeChargeUpdateOptions updateOptions, bool isRecipient = false, StripeRequestOptions requestOptions = null)
+        public virtual StripeCharge Update(string chargeId, StripeChargeUpdateOptions updateOptions, StripeRequestOptions requestOptions = null)
         {
             requestOptions = SetupRequestOptions(requestOptions);
 
