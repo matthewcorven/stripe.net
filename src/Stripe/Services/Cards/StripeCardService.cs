@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Stripe.Entities;
 
 namespace Stripe
 {
@@ -46,13 +47,14 @@ namespace Stripe
             return Mapper<StripeCard>.MapFromJson(response);
         }
 
-        public virtual void Delete(string customerOrRecipientId, string cardId, bool isRecipient = false, StripeRequestOptions requestOptions = null)
+        public virtual StripeDeletedEntity Delete(string customerOrRecipientId, string cardId, bool isRecipient = false, StripeRequestOptions requestOptions = null)
         {
             requestOptions = SetupRequestOptions(requestOptions);
 
             var url = SetupUrl(customerOrRecipientId, isRecipient, cardId);
 
-            Requestor.Delete(url, requestOptions);
+            var response = Requestor.Delete(url, requestOptions);
+            return Mapper<StripeDeletedEntity>.MapFromJson(response);
         }
 
         public virtual IEnumerable<StripeCard> List(string customerOrRecipientId, StripeListOptions listOptions = null, bool isRecipient = false, StripeRequestOptions requestOptions = null)
